@@ -30,7 +30,8 @@ public class GlobalExceptionHandler {
     public Result exceptionHandler(SQLIntegrityConstraintViolationException ex){
         String message = ex.getMessage();
         if(message.contains("Duplicate entry")){
-            return Result.error("用户名已存在");
+            String[] split = message.split(" ");
+            return Result.error( split[2] + "已存在");
         }else {
             return Result.error("未知错误");
         }

@@ -32,11 +32,19 @@
             <if test="updateUser != null">update_user = #{updateUser}</if>
         </set> where id = #{id}
     </update>
+    <update id="updateStatus">
+        update sky_take_out.employee
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser}</if>
+        </set> where id = #{id}
+    </update>
 
     <select id="pageQuery" resultType="com.sky.entity.Employee">
         select * from employee
         <where>
             <if test="name != null and name != '' ">name like concat('%', #{name}, '%')</if>
-        </where>
+        </where>  order by id asc
     </select>
 </mapper>

@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.context.BaseContext;
+import com.sky.dto.EditPasswordDTO;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -33,11 +35,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
 
-    @Autowired
-    JwtProperties jwtProperties;
-
-    @Autowired
-    HttpServletRequest request;
     /**
      * 员工登录
      *
@@ -83,29 +80,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPhone(employeeDTO.getPhone());
         employee.setUsername(employeeDTO.getUsername());
         employee.setIdNumber(employeeDTO.getIdNumber());
-
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-
-        String token = request.getHeader("token");
-        Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
-        Integer Id = (Integer) claims.get(JwtClaimsConstant.EMP_ID);
-
-
-        employee.setCreateUser(Id.longValue());
-        employee.setUpdateUser(Id.longValue());
-        employee.setStatus(1);
 
         employeeMapper.add(employee);
-
     }
 
     @Override
     public PageResult pageQuery(EmployeePageQueryDTO pageQueryDTO) {
-        Integer start = pageQueryDTO.getPage();
-        Integer pageSize = pageQueryDTO.getPageSize();
+        int start = pageQueryDTO.getPage();
+        int pageSize = pageQueryDTO.getPageSize();
         String name = pageQueryDTO.getName();
         PageHelper.startPage(start, pageSize);
 
@@ -120,8 +103,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void setStatus(Integer status, Long id) {
-        employeeMapper.setStatus(status, id);
+    public void updateStatus(Integer status, Long id) {
+        Employee employee = new Employee();
+        employee.setStatus(status);
+        employee.setId(id);
+
+
+        employeeMapper.updateStatus(employee);
     }
 
     @Override
@@ -139,27 +127,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUsername(employeeDTO.getUsername());
         employee.setIdNumber(employeeDTO.getIdNumber());
 
-        String token = request.getHeader("token");
-        Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
-        Integer Id = (Integer) claims.get(JwtClaimsConstant.EMP_ID);
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(Id.longValue());
-
         employeeMapper.updateEmp(employee);
     }
 
     @Override
-    public Integer editPassword(String newPassword, String oldPassword) {
-        String token = request.getHeader("token");
-        Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
-        Integer empId = (Integer) claims.get(JwtClaimsConstant.EMP_ID);
+    public Integer updatePassword(EditPasswordDTO editPasswordDTO) {
+        String oldPassword = editPasswordDTO.getOldPassword();
+        String newPassword = editPasswordDTO.getNewPassword();
 
-        oldPassword = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
-        newPassword = DigestUtils.md5DigestAsHex((newPassword.getBytes()));
+        editPasswordDTO.setOldPassword(DigestUtils.md5DigestAsHex(oldPassword.getBytes()));
+        editPasswordDTO.setNewPassword(DigestUtils.md5DigestAsHex((newPassword.getBytes())));
+        editPasswordDTO.setUpdateTime(LocalDateTime.now());
 
-        LocalDateTime updateTime = LocalDateTime.now();
-        Integer flag = employeeMapper.editPassword(empId, newPassword, oldPassword, updateTime);
-        return flag;
+        return employeeMapper.updatePassword(editPasswordDTO);
     }
 
 }

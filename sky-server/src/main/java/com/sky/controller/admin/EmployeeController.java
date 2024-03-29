@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.EditPasswordDTO;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -14,12 +15,10 @@ import com.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,8 +86,8 @@ public class EmployeeController {
 
     @PostMapping("/status/{status}")
     @ApiOperation("启用、禁用员工账号")
-    public Result setStatus(@PathVariable Integer status, @RequestParam Long id) {
-        employeeService.setStatus(status, id);
+    public Result updateStatus(@PathVariable Integer status, @RequestParam Long id) {
+        employeeService.updateStatus(status, id);
         return Result.success();
     }
 
@@ -115,8 +114,8 @@ public class EmployeeController {
 
     @PutMapping("/editPassword")
     @ApiOperation("修改密码")
-    public Result editPassword(String oldPassword, String newPassword) {
-        Integer flag = employeeService.editPassword(newPassword, oldPassword);
+    public Result updatePassword(@RequestBody EditPasswordDTO editPasswordDTO) {
+        Integer flag = employeeService.updatePassword(editPasswordDTO);
         if (flag == 0) {
             return Result.error("旧密码错误");
         }

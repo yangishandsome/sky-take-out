@@ -57,7 +57,7 @@ public class AliOssUtil {
         stringBuilder
                 .append(bucketName)
                 .append(".")
-                .append(endpoint)
+                .append(endpoint.replace("https://", ""))
                 .append("/")
                 .append(objectName);
 
