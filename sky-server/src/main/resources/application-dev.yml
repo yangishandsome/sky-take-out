@@ -1,17 +1,17 @@
-sky:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
-    port: 3306
-    database: sky_take_out
-    username: root
-    password: 123456
-
-  alioss:
-    endpoint: https://oss-cn-hangzhou.aliyuncs.com
-    accessKeyId: LTAI5tN4JtFw3yxkpWAkaUCs
-    accessKeySecret: eS1X3gWLc3cWSoHphpwFs0ly6nSL9Z
-    bucketName: yxc-web-bucket
+#sky:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    host: localhost
+#    port: 3306
+#    database: sky_take_out
+#    username: root
+#    password: 123456
+#
+#  alioss:
+#    endpoint: https://oss-cn-hangzhou.aliyuncs.com
+#    accessKeyId: LTAI5tN4JtFw3yxkpWAkaUCs
+#    accessKeySecret: eS1X3gWLc3cWSoHphpwFs0ly6nSL9Z
+#    bucketName: yxc-web-bucket
 
   redis:
     host: localhost
