@@ -19,9 +19,7 @@ public interface DishMapper {
 
     DishVO queryById(Integer id);
 
-    @Select("select id, name, category_id, price, image, description, status, create_time, update_time, create_user, update_user " +
-            "from dish where category_id = #{categoryId}")
-    List<Dish> queryByCategoryId(Integer categoryId);
+    List<Dish> queryByDish(Dish dish);
 
     @Select("select status from dish where id in (select dish_id from setmeal_dish where setmeal_id = #{setMealId})")
     List<Long> queryDishStatusBySetMealId(Long setMealId);

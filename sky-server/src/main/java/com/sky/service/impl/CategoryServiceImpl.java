@@ -78,7 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Integer id) {
-        List<Dish> dishes = dishMapper.queryByCategoryId(id);
+        List<Dish> dishes = dishMapper.queryByDish(Dish.builder().categoryId(Long.valueOf(id)).build());
         if(!dishes.isEmpty()){
             throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
         }

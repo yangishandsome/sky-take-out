@@ -14,6 +14,14 @@
     <select id="queryById" resultType="com.sky.vo.DishVO">
         select d.* , c.name categoryName from dish d left join category c on d.category_id = c.id where d.id = #{id}
     </select>
+    <select id="queryByDish" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="name != null">and name like concat('%',#{name},'%')</if>
+            <if test="categoryId != null">and category_id = #{categoryId}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into sky_take_out.dish

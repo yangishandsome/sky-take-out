@@ -35,4 +35,10 @@
         </where>
         order by sort asc
     </select>
+    <select id="queryByType" resultType="com.sky.entity.Category">
+        select * from category
+        <where>
+            <if test="type != null">type = #{type}</if>
+        </where>
+    </select>
 </mapper>
