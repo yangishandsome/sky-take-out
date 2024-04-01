@@ -11,7 +11,7 @@ public interface DishService {
 
     PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
-    DishVO queryById(Integer id);
+    DishVO queryById(Long id);
 
     List<Dish> queryByCategoryId(Integer categoryId);
 

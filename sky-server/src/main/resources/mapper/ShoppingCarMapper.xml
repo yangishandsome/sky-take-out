@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.ShoppingCarMapper">
+    <select id="getByIds" resultType="com.sky.entity.ShoppingCart">
+        select * from shopping_cart
+        <where>
+            <if test="dishId != null">dish_id = #{dishId}</if>
+            <if test="setmealId != null">and setmeal_id = #{setmealId}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+        </where>
+    </select>
+    <insert id="add">
+        insert into shopping_cart
+        <set>
+            <if test="id != null">id = #{id},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="dishId != null">dish_id = #{dishId},</if>
+            <if test="setmealId != null">setmeal_id = #{setmealId},</if>
+            <if test="dishFlavor != null">dish_flavor = #{dishFlavor},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </set>
+    </insert>
+    <update id="update">
+        update shopping_cart set number = #{number}
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="dishId != null">and dish_id = #{dishId}</if>
+            <if test="setmealId != null">and setmeal_id = #{setmealId}</if>
+        </where>
+    </update>
+    <update id="sub">
+        update shopping_cart set number = number - 1
+        <where>
+            <if test="userId != null">and user_id = #{userId} </if>
+            <if test="dishId != null">and dish_id = #{dishId} </if>
+            <if test="dishFlavor != null">and dish_flavor = #{dishFlavor}</if>
+            <if test="setmealId != null">and setmeal_id = #{setmealId} </if>
+        </where>
+    </update>
+</mapper>

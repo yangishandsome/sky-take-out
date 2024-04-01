@@ -11,9 +11,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -24,6 +26,9 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @GetMapping("/page")
     @ApiOperation("菜品分页查询")
     public Result pageQuery(DishPageQueryDTO dishPageQueryDTO){
@@ -33,7 +38,7 @@ public class DishController {
 
     @GetMapping("/{id}")
     @ApiOperation("根据id查询菜品")
-    public Result<DishVO> queryById(@PathVariable Integer id){
+    public Result<DishVO> queryById(@PathVariable Long id){
         DishVO dishVO = dishService.queryById(id);
         return Result.success(dishVO);
     }
@@ -48,6 +53,7 @@ public class DishController {
     @PostMapping
     @ApiOperation("新增菜品")
     public Result insert(@RequestBody DishVO dishVO){
+        cleanRedisCache("dish_" + dishVO.getCategoryId());
         dishService.insert(dishVO);
         return Result.success();
     }
@@ -55,6 +61,7 @@ public class DishController {
     @PostMapping("/status/{status}")
     @ApiOperation("启售、停售菜品")
     public Result updateStatus(@PathVariable Integer status, @RequestParam Integer id){
+        cleanRedisCache("dish_*");
         dishService.updateStatus(status, id);
         return Result.success();
     }
@@ -62,6 +69,7 @@ public class DishController {
     @DeleteMapping()
     @ApiOperation("批量删除菜品")
     public Result delete(@RequestParam List<Long> ids){
+        cleanRedisCache("dish_*");
         dishService.delete(ids);
         return Result.success();
     }
@@ -69,9 +77,14 @@ public class DishController {
     @PutMapping
     @ApiOperation("修改菜品")
     public Result updateDish(@RequestBody DishVO dishVO){
+        cleanRedisCache("dish_*");
         dishService.updateDish(dishVO);
         return Result.success();
     }
 
+    private void cleanRedisCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
 
 }

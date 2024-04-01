@@ -40,5 +40,6 @@
         <where>
             <if test="type != null">type = #{type}</if>
         </where>
+        order by sort asc
     </select>
 </mapper>

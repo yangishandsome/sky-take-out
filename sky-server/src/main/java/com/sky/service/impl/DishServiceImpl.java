@@ -54,9 +54,9 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Transactional
-    public DishVO queryById(Integer id) {
+    public DishVO queryById(Long id) {
         DishVO dishVO = dishMapper.queryById(id);;
-        List<DishFlavor> dishFlavors = dishFlavorMapper.queryByDishId(id);
+        List<DishFlavor> dishFlavors = dishFlavorMapper.queryByDishId(Math.toIntExact(id));
         dishVO.setFlavors(dishFlavors);
         return dishVO;
     }
@@ -100,7 +100,7 @@ public class DishServiceImpl implements DishService {
     @Transactional
     public void delete(List<Long> ids) {
         for(Long id : ids){
-            DishVO dishVO = dishMapper.queryById(Math.toIntExact(id));
+            DishVO dishVO = dishMapper.queryById(id);
             if(StatusConstant.ENABLE == dishVO.getStatus()){
                 throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
             }

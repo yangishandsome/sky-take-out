@@ -118,6 +118,9 @@ public class SetMealServiceImpl implements SetMealService {
 
         Long id = setmealDTO.getId();
         List<SetmealDish> dishes = setmealDTO.getSetmealDishes();
+        for(SetmealDish dish : dishes){
+            dish.setSetmealId(id);
+        }
         setMealDishMapper.delete(Collections.singletonList(id));
         setMealDishMapper.insert(dishes);
     }
