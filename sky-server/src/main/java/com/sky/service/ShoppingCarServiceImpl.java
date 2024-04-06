@@ -2,7 +2,9 @@ package com.sky.service;
 
 import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
+import com.sky.entity.DishFlavor;
 import com.sky.entity.ShoppingCart;
+import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.mapper.ShoppingCarMapper;
@@ -27,6 +29,9 @@ public class ShoppingCarServiceImpl implements ShoppingCarService{
 
     @Autowired
     private DishMapper dishMapper;
+
+    @Autowired
+    private DishFlavorMapper dishFlavorMapper;
 
     @Override
     public List<ShoppingCart> list() {
@@ -58,10 +63,8 @@ public class ShoppingCarServiceImpl implements ShoppingCarService{
                 shoppingCart.setAmount(setmealVO.getPrice());
             }else {
                 DishVO dishVO = dishMapper.queryById(shoppingCart.getDishId());
-
                 shoppingCart.setName(dishVO.getName());
                 shoppingCart.setImage(dishVO.getImage());
-                shoppingCart.setDishFlavor(dishVO.getFlavors().toString());
                 shoppingCart.setCreateTime(LocalDateTime.now());
                 shoppingCart.setNumber(1);
                 shoppingCart.setAmount(dishVO.getPrice());
